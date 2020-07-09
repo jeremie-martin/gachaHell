@@ -4,7 +4,7 @@
       <v-content class="wrapper">
         <div v-bind:class="getSliderComp()">
           <h2>Input</h2>
-          <div class="test" id="padBot">
+          <div v-bind:class="getH3Input()" id="padBot">
             <div>
               <h3 id="padRight">Drop / Pull rate</h3>
             </div>
@@ -41,7 +41,7 @@
             </template>
           </vue-slider>
 
-          <div class="test" id="padBot">
+          <div v-bind:class="getH3Input()" id="padBot">
             <div>
               <h3 id="padRight">Number of successes</h3>
             </div>
@@ -77,7 +77,7 @@
             </template>
           </vue-slider>
 
-          <div class="test" id="padBot">
+          <div v-bind:class="getH3Input()" id="padBot">
             <div>
               <h3 id="padRight">Number of runs</h3>
             </div>
@@ -113,7 +113,7 @@
             </template>
           </vue-slider>
 
-          <div class="test" id="padBot">
+          <div v-bind:class="getH3Input()" id="padBot">
             <div>
               <h3 id="padRight">Probability</h3>
             </div>
@@ -320,12 +320,20 @@ export default {
     };
   },
   methods: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
+    getH3Input() {
+      if (this.isMobile()) {
+        return "";
+      } else {
+        return "h3InputDesktop";
+      }
+    },
     getSliderComp() {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
+      if (this.isMobile()) {
         return "sliderCompMobile";
       } else {
         return "sliderCompDesktop";
@@ -466,7 +474,7 @@ li {
   font-size: 30px;
 }
 
-.test {
+.h3InputDesktop {
   display: flex;
   align-items: center;
   justify-content: space-between;
