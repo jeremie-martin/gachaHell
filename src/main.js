@@ -11,4 +11,8 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
+  created: function () {
+    document.title = "Gacha Hell"
+    document.querySelector('meta[name="description"]').setAttribute('content', 'random')
+  }
 }).$mount('#app')

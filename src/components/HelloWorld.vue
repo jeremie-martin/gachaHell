@@ -280,7 +280,7 @@ export default {
   data: function() {
     return {
       datacollection: null,
-      runNB: 50,
+      runNB: 250,
       rate: 0.01,
       proba: 0.925,
       succNB: 2,
@@ -474,6 +474,8 @@ li {
 }
 
 .slider {
+  margin-left: 7px;
+  margin-right: 7px;
   margin-bottom: 40px;
   margin-top: -25px;
 }
