@@ -79,7 +79,7 @@
 
           <div v-bind:class="getH3Input()" id="padBot">
             <div>
-              <h3 id="padRight">Number of runs</h3>
+              <h3 id="padRight">Number of trials</h3>
             </div>
             <div>
               <VueNumberInput
