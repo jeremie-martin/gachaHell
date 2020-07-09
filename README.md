@@ -1,4 +1,6 @@
-# binomial
+# Gacha Hell
+
+I usually code in C / C++ / Python, and this is my JS / Vue.js project. The code is horrendous. 
 
 ## Project setup
 ```
