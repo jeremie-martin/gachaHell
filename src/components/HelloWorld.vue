@@ -1,12 +1,29 @@
 <template>
   <div class="wrapper">
     <div class="sliderComp">
-      <h3>Probability</h3>
+      <h2>Input</h2>
+      <div class="test" id="padBot">
+        <div>
+          <h3 id="padRight">Drop / Pull rate</h3>
+        </div>
+        <div>
+          <VueNumberInput
+            v-model="rate"
+            :min="0"
+            :max="0.05"
+            :step="0.001"
+            @change="drag()"
+            inline
+            center
+            controls
+          />
+        </div>
+      </div>
       <vue-slider
         class="slider"
-        v-model="proba"
+        v-model="rate"
         :drag-on-click="true"
-        :tooltip="'always'"
+        :tooltip="'none'"
         :min="0"
         :max="0.05"
         :interval="0.001"
@@ -15,53 +32,152 @@
         :dot-size="20"
         @dragging="drag()"
         ref="slider1"
-        >
-        <template v-slot:label="{ label, active }">
-          <div :class="['vue-slider-mark-label', 'custom-label', { active }]">{{ label*100 + "%" }}</div>
+      >
+        <template v-slot:step="{ label, active }">
+          <div :class="['custom-step', { active }]"></div>
         </template>
       </vue-slider>
 
-      <h3>Number of successes</h3>
+      <div class="test" id="padBot">
+        <div>
+          <h3 id="padRight">Number of successes</h3>
+        </div>
+        <div>
+          <VueNumberInput
+            v-model="succNB"
+            :min="0"
+            :max="2000"
+            @change="drag()"
+            inline
+            center
+            controls
+          />
+        </div>
+      </div>
       <vue-slider
         class="slider"
         v-model="succNB"
-        :drag-on-click="true"
-        :tooltip="'always'"
+        :drag-on-click="none"
+        :tooltip="'none'"
         :min="0"
         :max="20"
         :interval="1"
-        :marks="marks"
+        :marks="marksSucc"
         :height="10"
-        :dot-size="15"
-        ref="slider"
+        :dot-size="20"
         @dragging="drag()"
-        >
-        <template v-slot:label="{ label, active }">
-          <div :class="['vue-slider-mark-label', 'custom-label', { active }]">{{ label }}</div>
+        ref="sliderRuns"
+      >
+        <template v-slot:step="{ label, active }">
+          <div :class="['custom-step', { active }]"></div>
         </template>
       </vue-slider>
 
-      <vue-good-table
-        :columns="columns"
-        :rows="tries"/>
+      <div class="test" id="padBot">
+        <div>
+          <h3 id="padRight">Number of runs</h3>
+        </div>
+        <div>
+          <VueNumberInput
+            v-model="runNB"
+            :min="0"
+            :max="2000"
+            @change="drag()"
+            inline
+            center
+            controls
+          />
+        </div>
+      </div>
+      <vue-slider
+        class="slider"
+        v-model="runNB"
+        :drag-on-click="true"
+        :tooltip="'none'"
+        :min="0"
+        :max="2000"
+        :interval="1"
+        :marks="marksRuns"
+        :height="10"
+        :dot-size="20"
+        @dragging="drag()"
+        ref="sliderRuns"
+      >
+        <template v-slot:step="{ label, active }">
+          <div :class="['custom-step', { active }]"></div>
+        </template>
+      </vue-slider>
+
+      <div class="test" id="padBot">
+        <div>
+          <h3 id="padRight">Probability</h3>
+        </div>
+        <div>
+          <VueNumberInput
+            v-model="proba"
+            :min="0"
+            :max="1"
+            :step="0.001"
+            @change="drag()"
+            inline
+            center
+            controls
+          />
+        </div>
+      </div>
+      <vue-slider
+        class="slider"
+        v-model="proba"
+        :drag-on-click="true"
+        :tooltip="'none'"
+        :min="0.5"
+        :max="1"
+        :interval="0.001"
+        :marks="marksProba"
+        :height="10"
+        :dot-size="20"
+        @dragging="drag()"
+        ref="slider1"
+      >
+        <template v-slot:step="{ label, active }">
+          <div :class="['custom-step', { active }]"></div>
+        </template>
+      </vue-slider>
+      <!-- <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart> -->
     </div>
 
     <div class="sliderComp">
-      <h3>Density</h3>
-      <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart>
+      <h2>Results</h2>
+
+      <vue-good-table
+        :columns="columns"
+        :rows="tries"
+        :sort-options="{
+        enabled: true,
+      }"
+      >
+        <template slot="table-row" slot-scope="props">
+          <span v-if="props.row.active">
+            <span style="font-weight: bold">{{props.row[props.column.field]}}</span>
+          </span>
+          <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        </template>
+      </vue-good-table>
     </div>
   </div>
 </template>
 
 <script>
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/antd.css'
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/antd.css";
+import VueNumberInput from "@chenfengyuan/vue-number-input";
+
 //import Raphael from 'raphael/raphael'
 //global.Raphael = Raphael
 // import { LineChart } from 'vue-morris'
-import ScatterChart from "../ScatterChart.js";
+// import ScatterChart from "../ScatterChart.js";
 
-var size = 5000;
+var size = 10000;
 var logf = new Array(size);
 var pcum = new Array(size);
 
@@ -73,7 +189,7 @@ function binomial(n, k) {
 }
 
 function binomialProbability(trials, successes, p) {
-  if(successes > trials) {
+  if (successes > trials) {
     return 0;
   }
   return (
@@ -105,61 +221,78 @@ function compute(N, k, p, find = "<") {
   }
 }
 
-function closest (arr, x) {
-    /* lb is the lower bound and ub the upper bound defining a subarray or arr. */
-    var lb = 0, 
-        ub = arr.length - 1 ;
-    /* We loop as long as x is in inside our subarray and the length of our subarray is greater than 0 (lb < ub). */
-    while (ub - lb > 1) {
-        var m = parseInt((ub - lb + 1) / 2) ; // The middle value
-        /* Depending on the middle value of our subarray, we update the bound. */
-        if (arr[lb + m] > x) {
-            ub = lb + m ;
-        }
-        else if (arr[lb + m] < x) {
-            lb = lb + m ;
-        }
-        else {
-            ub = lb + m ; lb = lb + m ;
-        }
+function closest(arr, x) {
+  /* lb is the lower bound and ub the upper bound defining a subarray or arr. */
+  var lb = 0,
+    ub = arr.length - 1;
+  /* We loop as long as x is in inside our subarray and the length of our subarray is greater than 0 (lb < ub). */
+  while (ub - lb > 1) {
+    var m = parseInt((ub - lb + 1) / 2); // The middle value
+    /* Depending on the middle value of our subarray, we update the bound. */
+    if (arr[lb + m] > x) {
+      ub = lb + m;
+    } else if (arr[lb + m] < x) {
+      lb = lb + m;
+    } else {
+      ub = lb + m;
+      lb = lb + m;
     }
-    /* After the loop, we know that the closest value is either the one at the lower or upper bound (may be the same if x is in arr). */
-    var clst = lb ;
-    if (Math.abs(arr[lb] - x) > Math.abs(arr[ub] - x)) {
-        clst = ub ;
-    }
-    return clst ; // If you want the value instead of the index, return arr[clst]
+  }
+  /* After the loop, we know that the closest value is either the one at the lower or upper bound (may be the same if x is in arr). */
+  var clst = lb;
+  if (Math.abs(arr[lb] - x) > Math.abs(arr[ub] - x)) {
+    clst = ub;
+  }
+  return clst; // If you want the value instead of the index, return arr[clst]
 }
 
 export default {
   components: {
     VueSlider,
-    ScatterChart,
+    VueNumberInput
+    // ScatterChart
   },
-  data: function () {
+  data: function() {
     return {
       datacollection: null,
-      proba: 0.01,
+      runNB: 50,
+      rate: 0.01,
+      proba: 0.925,
       succNB: 2,
-      CIs: [0.75, 0.90, 0.95, 0.98, 0.99],
+      CIs: [0.75, 0.9, 0.95, 0.98, 0.99],
       columns: [
         {
-          label: 'P >=',
-          field: 'ci',
-          type: 'number',
-          thClass: 'text-center',
+          label: "P >=",
+          field: "ci",
+          type: "number",
+          thClass: "text-center",
+          tdClass: "text-center"
         },
         {
-          label: '# Runs',
-          field: 'N',
-          type: 'number',
-          thClass: 'text-center',
-        },
+          label: "# Runs",
+          field: "N",
+          type: "number",
+          thClass: "text-center",
+          tdClass: "text-center"
+        }
       ],
       tries: [],
       plotD: [],
-      marks: val => (val*2000) % 20 === 0
-    }
+      marks: val =>
+        (val * 2000) % 20 === 0
+          ? {
+              label: `${val * 100}%`
+            }
+          : false,
+      marksProba: val =>
+        (val * 200) % 20 === 0
+          ? {
+              label: `${val * 100}%`
+            }
+          : false,
+      marksRuns: val => val % 250 === 0,
+      marksSucc: val => val % 2 === 0
+    };
   },
   methods: {
     findN(k, p, CI, start = 0) {
@@ -177,23 +310,31 @@ export default {
     },
     drag() {
       var N = this.succNB;
-      this.tries = []
-      this.plotD = []
-      pcum = []
-      var p = []
+      this.tries = [];
+      this.plotD = [];
+      pcum = [];
+      var p = [];
+      var ciToAdd;
       for (let i = 0; i <= size; i++) {
-        pcum.push(compute(i, this.succNB, this.proba, ">"));
-        p.push(compute(i, this.succNB, this.proba, "="));
+        pcum.push(compute(i, this.succNB, this.rate, ">"));
+        p.push(compute(i, this.succNB, this.rate, "="));
         pcum[i] += p[i];
-        this.plotD.push({"x": i, "y": p[i]});
-        if((p[i] < p[i-1]) && (p[i] < 0.0001)) {
+        if (i == this.runNB) {
+          ciToAdd = pcum[i];
+        }
+        this.plotD.push({ x: i, y: p[i] });
+        if (p[i] < p[i - 1] && p[i] < 0.0001 && i >= this.runNB) {
           break;
         }
       }
 
-      for(var i = 0; i < p.length && this.plotD.length < 20; i += Math.ceil(p.length / 20)) {
-          this.plotD.push({"x": i, "y": p[i]});
-          // this.plotD.push(p[i]);
+      for (
+        var i = 0;
+        i < p.length && this.plotD.length < 20;
+        i += Math.ceil(p.length / 20)
+      ) {
+        this.plotD.push({ x: i, y: p[i] });
+        // this.plotD.push(p[i]);
       }
 
       this.datacollection = {
@@ -204,48 +345,70 @@ export default {
             data: this.plotD,
             showLine: true,
             pointRadius: 0,
-            pointHoverRadius: 5,
+            pointHoverRadius: 5
           }
         ],
-                options: {
+        options: {
           legend: {
-            display: false,
-        },
-        scales: {
-        xAxes: [{
-            type: 'linear',
-            fontSize: 12
-            // ...
-        }],
-        yAxes: [{
-            fontSize: 12
-            // ...
-        }]
+            display: false
+          },
+          scales: {
+            xAxes: [
+              {
+                type: "linear",
+                fontSize: 12
+                // ...
+              }
+            ],
+            yAxes: [
+              {
+                fontSize: 12
+                // ...
+              }
+            ]
+          }
         }
-                }
       };
-      
+
+      this.CIs = [0.75, 0.9, 0.95, 0.98, 0.99];
+      this.CIs.push(this.proba);
+      this.CIs.push(ciToAdd);
+
       for (let ci of this.CIs) {
         N = closest(pcum, ci);
         //N = this.findN(this.succNB, this.proba, ci, N);
-        
-        this.tries.push({"ci": ci, "N": N});
+
+        this.tries.push({ ci: parseFloat(ci.toFixed(4)), N: N, active: false });
       }
+      this.tries[this.tries.length - 1].active = true;
+      this.tries[this.tries.length - 2].active = true;
+
+      this.tries.sort((a, b) => a.N - b.N);
     }
   },
   beforeMount() {
     //this.tries = .reduce((a,b) => (a[b] = 0, a), {});
 
-    this.drag()
+    this.drag();
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  padding-bottom: 28px;
+h2 {
+  text-align: center;
 }
+
+#padBot {
+  padding-bottom: 25px;
+}
+
+#padRight {
+  padding-right: 20px;
+  padding-bottom: 5px;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -259,38 +422,61 @@ a {
 }
 
 .wrapper {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    padding: 0 3%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0 3%;
 }
 
 .text-center {
-    text-align: center;
-    font-size: 30px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.test {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inputNb {
+  width: 200px;
 }
 
 .sliderComp {
-    width: 45%;
-    display: inline-block;
-    padding-left: 5px;
-    padding-right: 5px;
-    vertical-align: top;
+  width: 45%;
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
 }
 
 .slider {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
+  margin-top: -25px;
 }
 
 .custom-step {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  box-shadow: 0 0 0 3px #ccc;
+  box-shadow: 0 0 0 2px #ccc;
   background-color: #fff;
 }
 .custom-step.active {
-  box-shadow: 0 0 0 3px #3498db;
+  box-shadow: 0 0 0 2px #3498db;
+  background-color: #3498db;
+}
+
+.custom-label {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #ccc;
+  background-color: #fff;
+}
+.custom-label.active {
+  box-shadow: 0 0 0 2px #3498db;
   background-color: #3498db;
 }
 </style>
