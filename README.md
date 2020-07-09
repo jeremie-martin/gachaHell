@@ -1,6 +1,6 @@
 # Gacha Hell
 
-I usually code in C / C++ / Python, and this is my JS / Vue.js project. The code is horrendous. 
+I usually code in C / C++ and Python, moreover this is my first JS / Vue.js project. The code is horrendous. 
 
 ## Project setup
 ```
