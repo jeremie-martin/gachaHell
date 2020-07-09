@@ -1,169 +1,185 @@
 <template>
-  <div class="wrapper">
-    <div class="sliderComp">
-      <h2>Input</h2>
-      <div class="test" id="padBot">
-        <div>
-          <h3 id="padRight">Drop / Pull rate</h3>
-        </div>
-        <div>
-          <VueNumberInput
+  <div>
+    <v-app>
+      <v-content class="wrapper">
+        <div class="sliderComp">
+          <h2>Input</h2>
+          <div class="test" id="padBot">
+            <div>
+              <h3 id="padRight">Drop / Pull rate</h3>
+            </div>
+            <div>
+              <VueNumberInput
+                v-model="rate"
+                :min="0"
+                :max="0.05"
+                :step="0.001"
+                @change="drag()"
+                inline
+                center
+                controls
+              />
+            </div>
+          </div>
+          <vue-slider
+            class="slider"
             v-model="rate"
+            :drag-on-click="true"
+            :tooltip="'none'"
             :min="0"
             :max="0.05"
-            :step="0.001"
-            @change="drag()"
-            inline
-            center
-            controls
-          />
-        </div>
-      </div>
-      <vue-slider
-        class="slider"
-        v-model="rate"
-        :drag-on-click="true"
-        :tooltip="'none'"
-        :min="0"
-        :max="0.05"
-        :interval="0.001"
-        :marks="marks"
-        :height="10"
-        :dot-size="20"
-        @dragging="drag()"
-        ref="slider1"
-      >
-        <template v-slot:step="{ label, active }">
-          <div :class="['custom-step', { active }]"></div>
-        </template>
-      </vue-slider>
+            :interval="0.001"
+            :marks="marks"
+            :height="10"
+            :dot-size="20"
+            @dragging="drag()"
+            ref="slider1"
+          >
+            <template v-slot:step="{ label, active }">
+              <div :class="['custom-step', { active }]"></div>
+            </template>
+          </vue-slider>
 
-      <div class="test" id="padBot">
-        <div>
-          <h3 id="padRight">Number of successes</h3>
-        </div>
-        <div>
-          <VueNumberInput
+          <div class="test" id="padBot">
+            <div>
+              <h3 id="padRight">Number of successes</h3>
+            </div>
+            <div>
+              <VueNumberInput
+                v-model="succNB"
+                :min="0"
+                :max="2000"
+                @change="drag()"
+                inline
+                center
+                controls
+              />
+            </div>
+          </div>
+          <vue-slider
+            class="slider"
             v-model="succNB"
+            :drag-on-click="none"
+            :tooltip="'none'"
             :min="0"
-            :max="2000"
-            @change="drag()"
-            inline
-            center
-            controls
-          />
-        </div>
-      </div>
-      <vue-slider
-        class="slider"
-        v-model="succNB"
-        :drag-on-click="none"
-        :tooltip="'none'"
-        :min="0"
-        :max="20"
-        :interval="1"
-        :marks="marksSucc"
-        :height="10"
-        :dot-size="20"
-        @dragging="drag()"
-        ref="sliderRuns"
-      >
-        <template v-slot:step="{ label, active }">
-          <div :class="['custom-step', { active }]"></div>
-        </template>
-      </vue-slider>
+            :max="20"
+            :interval="1"
+            :marks="marksSucc"
+            :height="10"
+            :dot-size="20"
+            @dragging="drag()"
+            ref="sliderRuns"
+          >
+            <template v-slot:step="{ label, active }">
+              <div :class="['custom-step', { active }]"></div>
+            </template>
+          </vue-slider>
 
-      <div class="test" id="padBot">
-        <div>
-          <h3 id="padRight">Number of runs</h3>
-        </div>
-        <div>
-          <VueNumberInput
+          <div class="test" id="padBot">
+            <div>
+              <h3 id="padRight">Number of runs</h3>
+            </div>
+            <div>
+              <VueNumberInput
+                v-model="runNB"
+                :min="0"
+                :max="2000"
+                @change="drag()"
+                inline
+                center
+                controls
+              />
+            </div>
+          </div>
+          <vue-slider
+            class="slider"
             v-model="runNB"
+            :drag-on-click="true"
+            :tooltip="'none'"
             :min="0"
             :max="2000"
-            @change="drag()"
-            inline
-            center
-            controls
-          />
-        </div>
-      </div>
-      <vue-slider
-        class="slider"
-        v-model="runNB"
-        :drag-on-click="true"
-        :tooltip="'none'"
-        :min="0"
-        :max="2000"
-        :interval="1"
-        :marks="marksRuns"
-        :height="10"
-        :dot-size="20"
-        @dragging="drag()"
-        ref="sliderRuns"
-      >
-        <template v-slot:step="{ label, active }">
-          <div :class="['custom-step', { active }]"></div>
-        </template>
-      </vue-slider>
+            :interval="1"
+            :marks="marksRuns"
+            :height="10"
+            :dot-size="20"
+            @dragging="drag()"
+            ref="sliderRuns"
+          >
+            <template v-slot:step="{ label, active }">
+              <div :class="['custom-step', { active }]"></div>
+            </template>
+          </vue-slider>
 
-      <div class="test" id="padBot">
-        <div>
-          <h3 id="padRight">Probability</h3>
-        </div>
-        <div>
-          <VueNumberInput
+          <div class="test" id="padBot">
+            <div>
+              <h3 id="padRight">Probability</h3>
+            </div>
+            <div>
+              <VueNumberInput
+                v-model="proba"
+                :min="0"
+                :max="1"
+                :step="0.001"
+                @change="drag()"
+                inline
+                center
+                controls
+              />
+            </div>
+          </div>
+          <vue-slider
+            class="slider"
             v-model="proba"
-            :min="0"
+            :drag-on-click="true"
+            :tooltip="'none'"
+            :min="0.5"
             :max="1"
-            :step="0.001"
-            @change="drag()"
-            inline
-            center
-            controls
-          />
+            :interval="0.001"
+            :marks="marksProba"
+            :height="10"
+            :dot-size="20"
+            @dragging="drag()"
+            ref="slider1"
+          >
+            <template v-slot:step="{ label, active }">
+              <div :class="['custom-step', { active }]"></div>
+            </template>
+          </vue-slider>
+          <!-- <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart> -->
         </div>
-      </div>
-      <vue-slider
-        class="slider"
-        v-model="proba"
-        :drag-on-click="true"
-        :tooltip="'none'"
-        :min="0.5"
-        :max="1"
-        :interval="0.001"
-        :marks="marksProba"
-        :height="10"
-        :dot-size="20"
-        @dragging="drag()"
-        ref="slider1"
-      >
-        <template v-slot:step="{ label, active }">
-          <div :class="['custom-step', { active }]"></div>
-        </template>
-      </vue-slider>
-      <!-- <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart> -->
-    </div>
 
-    <div class="sliderComp">
-      <h2>Results</h2>
+        <div class="sliderComp">
+          <h2>Results</h2>
 
-      <vue-good-table
-        :columns="columns"
-        :rows="tries"
-        :sort-options="{
+          <vue-good-table
+            :columns="columns"
+            :rows="tries"
+            :sort-options="{
         enabled: true,
       }"
-      >
-        <template slot="table-row" slot-scope="props">
-          <span v-if="props.row.active">
-            <span style="font-weight: bold">{{props.row[props.column.field]}}</span>
-          </span>
-          <span v-else>{{props.formattedRow[props.column.field]}}</span>
-        </template>
-      </vue-good-table>
-    </div>
+          >
+            <template slot="table-row" slot-scope="props">
+              <span v-if="props.row.active">
+                <span style="font-weight: bold">{{props.row[props.column.field]}}</span>
+              </span>
+              <span v-else>{{props.formattedRow[props.column.field]}}</span>
+            </template>
+          </vue-good-table>
+        </div>
+      </v-content>
+
+      <v-footer>
+        <v-spacer></v-spacer>
+        <div>
+          <p>
+            <span class="copy-left">©</span>
+            Martin Jérémie
+            ({{ new Date().getFullYear() }})
+            <a href="https://github.com/jeremie-martin/gachaHell">github</a>
+          </p>
+        </div>
+      </v-footer>
+    </v-app>
   </div>
 </template>
 
@@ -417,9 +433,6 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
-  color: #42b983;
-}
 
 .wrapper {
   display: flex;
@@ -478,5 +491,17 @@ a {
 .custom-label.active {
   box-shadow: 0 0 0 2px #3498db;
   background-color: #3498db;
+}
+
+.copy-left {
+  display: inline-block;
+  text-align: right;
+  margin: 0px;
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: “FlipH”;
 }
 </style>
