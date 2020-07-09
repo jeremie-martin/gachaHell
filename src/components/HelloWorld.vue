@@ -32,6 +32,7 @@
             :marks="marks"
             :height="10"
             :dot-size="20"
+            :process-style="{ backgroundColor: '#9dd8ff' }"
             @dragging="drag()"
             ref="slider1"
           >
@@ -67,6 +68,7 @@
             :marks="marksSucc"
             :height="10"
             :dot-size="20"
+            :process-style="{ backgroundColor: '#9dd8ff' }"
             @dragging="drag()"
             ref="sliderRuns"
           >
@@ -102,11 +104,12 @@
             :marks="marksRuns"
             :height="10"
             :dot-size="20"
+            :process-style="{ backgroundColor: '#a2ea8c' }"
             @dragging="drag()"
             ref="sliderRuns"
           >
             <template v-slot:step="{ label, active }">
-              <div :class="['custom-step', { active }]"></div>
+              <div :class="['custom-stepRuns', { active }]"></div>
             </template>
           </vue-slider>
 
@@ -138,11 +141,12 @@
             :marks="marksProba"
             :height="10"
             :dot-size="20"
+            :process-style="{ backgroundColor: '#ffd99d' }"
             @dragging="drag()"
             ref="slider1"
           >
             <template v-slot:step="{ label, active }">
-              <div :class="['custom-step', { active }]"></div>
+              <div :class="['custom-stepProba', { active }]"></div>
             </template>
           </vue-slider>
           <!-- <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart> -->
@@ -159,8 +163,11 @@
       }"
           >
             <template slot="table-row" slot-scope="props">
-              <span v-if="props.row.active">
-                <span style="font-weight: bold">{{props.row[props.column.field]}}</span>
+              <span v-if="props.row.active === 1">
+                <span style="font-weight: bold; color: #53c82f;">{{props.row[props.column.field]}}</span>
+              </span>
+              <span v-else-if="props.row.active === 2">
+                <span style="font-weight: bold; color: #e48f20;">{{props.row[props.column.field]}}</span>
               </span>
               <span v-else>{{props.formattedRow[props.column.field]}}</span>
             </template>
@@ -175,7 +182,9 @@
             <span class="copy-left">©</span>
             Martin Jérémie
             ({{ new Date().getFullYear() }})
-            <a href="https://github.com/jeremie-martin/gachaHell">github</a>
+            <a
+              href="https://github.com/jeremie-martin/gachaHell"
+            >github</a>
           </p>
         </div>
       </v-footer>
@@ -185,7 +194,7 @@
 
 <script>
 import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/antd.css";
+import "vue-slider-component/theme/default.css";
 import VueNumberInput from "@chenfengyuan/vue-number-input";
 
 //import Raphael from 'raphael/raphael'
@@ -394,10 +403,10 @@ export default {
         N = closest(pcum, ci);
         //N = this.findN(this.succNB, this.proba, ci, N);
 
-        this.tries.push({ ci: parseFloat(ci.toFixed(4)), N: N, active: false });
+        this.tries.push({ ci: parseFloat(ci.toFixed(4)), N: N, active: 0 });
       }
-      this.tries[this.tries.length - 1].active = true;
-      this.tries[this.tries.length - 2].active = true;
+      this.tries[this.tries.length - 1].active = 1;
+      this.tries[this.tries.length - 2].active = 2;
 
       this.tries.sort((a, b) => a.N - b.N);
     }
@@ -481,16 +490,28 @@ li {
   background-color: #3498db;
 }
 
-.custom-label {
+.custom-stepRuns {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   box-shadow: 0 0 0 2px #ccc;
   background-color: #fff;
 }
-.custom-label.active {
-  box-shadow: 0 0 0 2px #3498db;
-  background-color: #3498db;
+.custom-stepRuns.active {
+  box-shadow: 0 0 0 2px #53c82f;
+  background-color: #53c82f;
+}
+
+.custom-stepProba {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #ccc;
+  background-color: #fff;
+}
+.custom-stepProba.active {
+  box-shadow: 0 0 0 2px #e48f20;
+  background-color: #e48f20;
 }
 
 .copy-left {
