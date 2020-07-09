@@ -2,7 +2,7 @@
   <div>
     <v-app>
       <v-content class="wrapper">
-        <div class="sliderComp">
+        <div v-bind:class="getSliderComp()">
           <h2>Input</h2>
           <div class="test" id="padBot">
             <div>
@@ -152,7 +152,7 @@
           <!-- <scatter-chart :chart-data="datacollection" id="mychart"></scatter-chart> -->
         </div>
 
-        <div class="sliderComp">
+        <div v-bind:class="getSliderComp()">
           <h2>Results</h2>
 
           <vue-good-table
@@ -320,6 +320,17 @@ export default {
     };
   },
   methods: {
+    getSliderComp() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return "sliderCompMobile";
+      } else {
+        return "sliderCompDesktop";
+      }
+    },
     findN(k, p, CI, start = 0) {
       var best = 100000000;
       var bestN = 0;
@@ -465,8 +476,16 @@ li {
   width: 200px;
 }
 
-.sliderComp {
+.sliderCompDesktop {
   width: 45%;
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+.sliderCompMobile {
+  width: 90%;
   display: inline-block;
   padding-left: 5px;
   padding-right: 5px;
