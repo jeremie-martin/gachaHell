@@ -294,7 +294,7 @@ export default {
           tdClass: "text-center"
         },
         {
-          label: "# Runs",
+          label: "# Trials",
           field: "N",
           type: "number",
           thClass: "text-center",
@@ -421,8 +421,11 @@ export default {
       for (let ci of this.CIs) {
         N = closest(pcum, ci);
         //N = this.findN(this.succNB, this.proba, ci, N);
-
-        this.tries.push({ ci: parseFloat(ci.toFixed(4)), N: N, active: 0 });
+        this.tries.push({
+          ci: `${parseFloat((ci * 100).toFixed(2))}%`,
+          N: N,
+          active: 0
+        });
       }
       this.tries[this.tries.length - 1].active = 1;
       this.tries[this.tries.length - 2].active = 2;
