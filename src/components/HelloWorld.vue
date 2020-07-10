@@ -239,6 +239,12 @@ function binomial(n, k) {
   return Math.exp(logf[n] - logf[n - k] - logf[k]);
 }
 
+function toFixed(num, precision) {
+  return (+(Math.round(+(num + "e" + precision)) + "e" + -precision)).toFixed(
+    precision
+  );
+}
+
 function binomialProbability(trials, successes, p) {
   if (successes > trials) {
     return 0;
@@ -446,9 +452,14 @@ export default {
 
       for (let ci of this.CIs) {
         N = closest(pcum, ci);
-        //N = this.findN(this.succNB, this.proba, ci, N);
+        if (this.rate === 0.0) N = Number.POSITIVE_INFINITY;
+        if (this.runNB === 0 || ci === 0.0) N = 0;
+        if (this.succNB === 0) {
+          N = 0;
+          ci = 1.0;
+        }
         this.tries.push({
-          ci: `${parseFloat((ci * 100).toFixed(2))}%`,
+          ci: `${parseFloat(toFixed(ci * 100, 3))}%`,
           N: N,
           active: 0
         });
@@ -456,7 +467,7 @@ export default {
       this.tries[this.tries.length - 1].active = 1;
       this.tries[this.tries.length - 2].active = 2;
 
-      this.tries.sort((a, b) => a.N - b.N);
+      this.tries.sort((a, b) => parseFloat(a.ci) - parseFloat(b.ci));
     }
   },
   beforeMount() {
