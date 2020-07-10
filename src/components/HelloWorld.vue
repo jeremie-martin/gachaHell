@@ -452,8 +452,9 @@ export default {
 
       for (let ci of this.CIs) {
         N = closest(pcum, ci);
+        if (this.ci === 0.0) N = 0;
         if (this.rate === 0.0) N = Number.POSITIVE_INFINITY;
-        if (this.runNB === 0 || ci === 0.0) N = 0;
+        if (this.runNB === 0) N = 0;
         if (this.succNB === 0) {
           N = 0;
           ci = 1.0;
