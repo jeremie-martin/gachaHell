@@ -176,6 +176,28 @@
               <span v-else>{{props.column.label}}</span>
             </template>
           </vue-good-table>
+          <h2>What is it about?</h2>
+          <div class="small">
+            <p>
+              Probabilities play an important role in many gacha games. In Girls' Frontline, you have certain odds of crafting certain tdolls or equips when you use a recipe. For instance, you approximately have a
+              <a
+                href="https://gf-db.github.io/gfdb/gfdb.html?type=tdoll&amp;id=96&amp;epoch.tdoll=51.0"
+              >1% chance of getting Grizzly</a> with the recipe 30-30-30-30 (see also
+              <a
+                href="https://gamepress.gg/girlsfrontline/sites/girlsfrontline/files/2020-01/rateup-crafting-infographic.jpg"
+              >Recommended Crafting Recipes</a>). Keep in mind this is only an average.
+            </p>
+            <p>
+              This website calculates how many trials should be needed to have X% chance of getting her at least once for you! You can set any drop rate between 0% and 5%. If you drag the
+              <em>Number of successes</em> slider to 1, you will see that 95% of players should get her at least once with 298 pulls. Adjust it to see the expected number of trials required to get you favorite tdoll
+              <em>N</em> times.
+            </p>
+            <p>
+              If you want to know how many attempts are needed to have a 1/2 chance of crafting something, just drag the
+              <em>Probability</em> slider to 50%. Now if you want to know the probability of getting her after 500 crafts, all you have to do is to set the
+              <em>Number of trials</em> to 500.
+            </p>
+          </div>
         </div>
       </v-content>
 
@@ -479,6 +501,10 @@ li {
 .text-center {
   text-align: center;
   font-size: 30px;
+}
+
+.small {
+  font-size: medium;
 }
 
 .h3InputDesktop {
