@@ -3,7 +3,7 @@
     <v-app>
       <v-content class="wrapper">
         <div v-bind:class="getSliderComp()">
-          <h2>Input</h2>
+          <h2>Inputs</h2>
           <div v-bind:class="getH3Input()" id="padBot">
             <div>
               <h3 id="padRight">Drop / Pull rate</h3>
