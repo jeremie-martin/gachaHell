@@ -176,7 +176,7 @@
               <span v-else>{{props.column.label}}</span>
             </template>
           </vue-good-table>
-          <h2>What is it about?</h2>
+          <h2>About</h2>
           <div class="small">
             <p>
               Probabilities play an important role in many gacha games. In Girls' Frontline, you have certain odds of crafting certain tdolls or equips when you use a recipe. For instance, you approximately have a
@@ -189,7 +189,7 @@
             </p>
             <p>
               This website calculates how many trials should be needed to have X% chance of getting her at least once for you! You can set any drop rate between 0% and 5%. If you drag the
-              <em>Number of successes</em> slider to 1, you will see that 95% of players should get her at least once with 298 pulls. Adjust it to see the expected number of trials required to get you favorite tdoll
+              <em>Number of successes</em> slider to 1, you will see that 95% of players should get her at least once with 298 pulls. Adjust it to see the expected number of trials required to get your favorite tdoll
               <em>N</em> times.
             </p>
             <p>
