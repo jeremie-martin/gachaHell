@@ -171,6 +171,10 @@
               </span>
               <span v-else>{{props.formattedRow[props.column.field]}}</span>
             </template>
+            <template slot="table-column" slot-scope="props">
+              <span v-if="props.column.label =='P >= '">{{"Prob of getting >= " + succNB}}</span>
+              <span v-else>{{props.column.label}}</span>
+            </template>
           </vue-good-table>
         </div>
       </v-content>
@@ -287,7 +291,7 @@ export default {
       CIs: [0.75, 0.9, 0.95, 0.98, 0.99],
       columns: [
         {
-          label: "P >=",
+          label: "P >= ",
           field: "ci",
           type: "number",
           thClass: "text-center",
