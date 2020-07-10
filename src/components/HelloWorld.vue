@@ -452,13 +452,14 @@ export default {
 
       for (let ci of this.CIs) {
         N = closest(pcum, ci);
-        if (this.ci === 0.0) N = 0;
-        if (this.rate === 0.0) N = Number.POSITIVE_INFINITY;
-        if (this.runNB === 0) N = 0;
+        if (ci === 0.0 || (this.runNB === 0 && ci === ciToAdd)) {
+          N = 0;
+        }
         if (this.succNB === 0) {
           N = 0;
           ci = 1.0;
-        }
+        } else if (this.rate === 0.0) N = Number.POSITIVE_INFINITY;
+
         this.tries.push({
           ci: `${parseFloat(toFixed(ci * 100, 3))}%`,
           N: N,
