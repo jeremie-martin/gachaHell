@@ -49,7 +49,7 @@
               <VueNumberInput
                 v-model="succNB"
                 :min="0"
-                :max="2000"
+                :max="20"
                 @change="drag()"
                 inline
                 center
